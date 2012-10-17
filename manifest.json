@@ -1,0 +1,24 @@
+{
+  "name": "Cbox Console",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "Chrome Game Console",
+  "icons": { 
+  		"16": "images/chrome-grey-16.png",
+      "48": "images/chrome-grey-48.png",
+      "128": "images/chrome-grey-128.png" 
+  },
+  "default_locale": "en",
+  "app" : {
+      "launch": {
+          "local_path": "main.html"
+      },
+      "icons": {
+          "128": "chrome-grey-128.png"
+      }
+  },
+  "update_url" : "http://localhost:8888/",
+  "background": { 
+  	"scripts": ["static/background.js"] 
+	}
+}
