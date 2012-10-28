@@ -1,0 +1,11 @@
+{
+  "files": {},
+  "program": {
+    "x86-64": {
+      "url": "cbox_sdk_x86_64.nexe"
+    },
+    "x86-32": {
+      "url": "cbox_sdk_x86_32.nexe"
+    }
+  }
+}
