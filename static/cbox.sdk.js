@@ -257,11 +257,11 @@ jQuery(function ($) {
         //TODO : Connect Here for Keyboard Events
         console.log(arguments);
     };
-    var CBOX_SDK_gamepad : function(){
+    var CBOX_SDK_gamepad = function(){
         //TODO : Connect Here for Gamepad Events
         console.log(arguments);
     };
-    var CBOX_SDK_nunchuk : function(){
+    var CBOX_SDK_nunchuk =  function(){
         //TODO : Connect Here for Nunchuk Events
         console.log(arguments);
     };
