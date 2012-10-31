@@ -1,11 +1,3 @@
-/**
- * Created with PyCharm.
- * User: songhun
- * Date: 10/27/12
- * Time: 3:12 PM
- * To change this template use File | Settings | File Templates.
- */
-
 // Copyright (c) 2012 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -57,7 +49,6 @@ var common = (function () {
         // to ensure that the listeners are active before the NaCl module 'load'
         // event fires.
         var listenerDiv = document.getElementById('listener');
-        console.log(listenerDiv, moduleEl);
         listenerDiv.appendChild(moduleEl);
     }
 
@@ -237,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (loadFunction) {
         loadFunction("cbox_sdk", "static", "cbox_sdk",
-            120, 30);
+            70, 25);
 
     }
 });
@@ -248,20 +239,23 @@ jQuery(function ($) {
 
     var CBOX_SDK_focusIn = function(){
         //TODO : Hide Layer
+        $("#osx-container").css("visibility","hidden");
     };
     var CBOX_SDK_focusOut = function(){
         //TODO : Show Connect Layer
+        $("#osx-container").css("visibility","visible");
     };
 
     var CBOX_SDK_keyboard = function(){
         //TODO : Connect Here for Keyboard Events
         console.log(arguments);
+
     };
-    var CBOX_SDK_gamepad : function(){
+    var CBOX_SDK_gamepad = function(){
         //TODO : Connect Here for Gamepad Events
         console.log(arguments);
     };
-    var CBOX_SDK_nunchuk : function(){
+    var CBOX_SDK_nunchuk =  function(){
         //TODO : Connect Here for Nunchuk Events
         console.log(arguments);
     };
@@ -292,7 +286,12 @@ jQuery(function ($) {
         }
     }
 
+
     $("#osx-modal-content").fadeIn('slow');
+    setTimeout(function(){
+        $("#nacl_module").css("position","absolute");
+        $("#nacl_module").css("margin","-5px 0 0 -60px");
+    },100);
 
 
 });
