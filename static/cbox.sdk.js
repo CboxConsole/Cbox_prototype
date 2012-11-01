@@ -1,11 +1,3 @@
-/**
- * Created with PyCharm.
- * User: songhun
- * Date: 10/27/12
- * Time: 3:12 PM
- * To change this template use File | Settings | File Templates.
- */
-
 // Copyright (c) 2012 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -57,7 +49,6 @@ var common = (function () {
         // to ensure that the listeners are active before the NaCl module 'load'
         // event fires.
         var listenerDiv = document.getElementById('listener');
-        console.log(listenerDiv, moduleEl);
         listenerDiv.appendChild(moduleEl);
     }
 
@@ -237,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (loadFunction) {
         loadFunction("cbox_sdk", "static", "cbox_sdk",
-            120, 30);
+            70, 25);
 
     }
 });
@@ -246,22 +237,124 @@ document.addEventListener('DOMContentLoaded', function() {
 
 jQuery(function ($) {
 
-    var CBOX_SDK_focusIn = function(){
-        //TODO : Hide Layer
-    };
-    var CBOX_SDK_focusOut = function(){
-        //TODO : Show Connect Layer
+
+    var CBOX_INPUT = {
+        pX1 : 0,
+        pY1 : 0,
+        pX2 : 0,
+        pY2 : 0,
+        btnA : 0,
+        btnB : 0,
+        btnY : 0,
+        btnX : 0,
+        btnLB : 0,
+        btnRB : 0,
+        btnLT : 0,
+        btnRT : 0,
+        accX : 0,
+        accY : 0,
+        accZ : 0
     };
 
-    var CBOX_SDK_keyboard = function(){
-        //TODO : Connect Here for Keyboard Events
-        console.log(arguments);
+    var CBOX_SDK_focusIn = function(){
+        $("#osx-container").css("visibility","hidden");
+        var CBOX_INPUT = {
+            pX1 : 0,
+            pY1 : 0,
+            pX2 : 0,
+            pY2 : 0,
+            btnA : 0,
+            btnB : 0,
+            btnY : 0,
+            btnX : 0,
+            btnLB : 0,
+            btnRB : 0,
+            btnLT : 0,
+            btnRT : 0,
+            accX : 0,
+            accY : 0,
+            accZ : 0
+        };
     };
+    var CBOX_SDK_focusOut = function(){
+        $("#osx-container").css("visibility","visible");
+    };
+
+    var CBOX_SDK_KEYMAP = {
+        37 : 'left',
+        38 : 'up',
+        39 : 'right',
+        40 : 'down',
+        13 : 'btnA', //enter
+        8 : 'back',
+        27 : 'esc',
+        65: 'btnA', // a
+        83 : 'btnB', //s
+        90 : 'btnY', //z
+        88 : 'btnX' //x
+    };
+
+    var CBOX_SDK_keyboard = function(keycode,kind){
+        //TODO : Connect Here for Keyboard Events
+        console.log(CBOX_INPUT.pX, keycode, CBOX_SDK_KEYMAP[keycode], kind);
+
+        // for KeyDown
+        if (kind == "Down") {
+            switch(CBOX_SDK_KEYMAP[keycode]){
+                case "left" :
+                    CBOX_INPUT.pX1 -= 2;
+                    break;
+                case "up" :
+                    CBOX_INPUT.pY1 -= 2;
+                    break;
+                case "right" :
+                    CBOX_INPUT.pX2 += 2;
+                    break;
+                case "down" :
+                    CBOX_INPUT.pY2 += 2;
+                    break;
+                case "back" :
+                    break;
+                case "esc" :
+                    break;
+                case "btnA" :
+                    CBOX_INPUT.btnA = 1;
+                    break;
+                case "btnB" :
+                    CBOX_INPUT.btnB = 1;
+                    break;
+                case "btnY" :
+                    CBOX_INPUT.btnY = 1;
+                    break;
+                case "btnX" :
+                    CBOX_INPUT.btnX = 1;
+                    break;
+            };
+        }else{
+            switch(CBOX_SDK_KEYMAP[keycode]){
+                case "btnA" :
+                    CBOX_INPUT.btnA = 0;
+                    break;
+                case "btnB" :
+                    CBOX_INPUT.btnB = 0;
+                    break;
+                case "btnY" :
+                    CBOX_INPUT.btnY = 0;
+                    break;
+                case "btnX" :
+                    CBOX_INPUT.btnX = 0;
+                    break;
+            };
+        }
+
+        //Backbone.KeyEventListener.trigger()
+
+    };
+    var i = 0;
     var CBOX_SDK_gamepad = function(){
         //TODO : Connect Here for Gamepad Events
-        console.log(arguments);
     };
-    var CBOX_SDK_nunchuk = function(){
+    var CBOX_SDK_nunchuk =  function(){
         //TODO : Connect Here for Nunchuk Events
         console.log(arguments);
     };
@@ -292,7 +385,12 @@ jQuery(function ($) {
         }
     }
 
+
     $("#osx-modal-content").fadeIn('slow');
+    setTimeout(function(){
+        $("#nacl_module").css("position","absolute");
+        $("#nacl_module").css("margin","-5px 0 0 -60px");
+    },100);
 
 
 });
