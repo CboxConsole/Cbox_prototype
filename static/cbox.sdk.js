@@ -305,7 +305,7 @@ jQuery(function ($) {
 
     var CBOX_SDK_keyboard = function(keycode,kind){
         //TODO : Connect Here for Keyboard Events
-        console.log(CBOX_INPUT.pX, keycode, CBOX_SDK_KEYMAP[keycode], kind);
+        // console.log(CBOX_INPUT.pX, keycode, CBOX_SDK_KEYMAP[keycode], kind);
 
         // for KeyDown
         if (kind == "Down") {
@@ -317,10 +317,10 @@ jQuery(function ($) {
                     CBOX_INPUT.pY1 -= 2;
                     break;
                 case "right" :
-                    CBOX_INPUT.pX2 += 2;
+                    CBOX_INPUT.pX1 += 2;
                     break;
                 case "down" :
-                    CBOX_INPUT.pY2 += 2;
+                    CBOX_INPUT.pY1 += 2;
                     break;
                 case "back" :
                     break;
@@ -358,18 +358,19 @@ jQuery(function ($) {
 
         // add more information about keycode
         // CBOX_INPUT.keyCode = keycode;
-        // CBOX_INPUT.type = kind;
+        CBOX_INPUT.type = kind;
 
         // trigger event to listener
-        cbox.triggerEvent(CBOX_INPUT);
+        cbox.triggerEvent(CBOX_INPUT, cbox.context, cbox);
     };
     var i = 0;
     var CBOX_SDK_gamepad = function(){
+    	if (i++ % 50)
         cbox.triggerEvent(CBOX_INPUT);
     };
 
     var CBOX_SDK_nunchuk =  function(){
-        cbox.triggerEvent(CBOX_INPUT);
+        // cbox.triggerEvent(CBOX_INPUT);
     };
 
     var _defaultFuncs = {
