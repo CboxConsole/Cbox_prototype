@@ -236,7 +236,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 jQuery(function ($) {
-
+	window.cbox = {
+		listener: undefined,
+		context: undefined,
+		addEventListener: function(listener, context) {
+			window.cbox.listener = listener;
+		},
+		triggerEvent: function(ce) {
+			!window.cbox.listener || window.cbox.listener(ce, cbox.context, window.cbox)
+		}
+	}
 
     var CBOX_INPUT = {
         pX1 : 0,
@@ -347,16 +356,20 @@ jQuery(function ($) {
             };
         }
 
-        //Backbone.KeyEventListener.trigger()
+        // add more information about keycode
+        // CBOX_INPUT.keyCode = keycode;
+        // CBOX_INPUT.type = kind;
 
+        // trigger event to listener
+        cbox.triggerEvent(CBOX_INPUT);
     };
     var i = 0;
     var CBOX_SDK_gamepad = function(){
-        //TODO : Connect Here for Gamepad Events
+        cbox.triggerEvent(CBOX_INPUT);
     };
+
     var CBOX_SDK_nunchuk =  function(){
-        //TODO : Connect Here for Nunchuk Events
-        console.log(arguments);
+        cbox.triggerEvent(CBOX_INPUT);
     };
 
     var _defaultFuncs = {
@@ -376,6 +389,7 @@ jQuery(function ($) {
             if( message.data.indexOf("o::") == 0 ){
                 _order = message.data.replace("o::","").split(":");
                 func = _defaultFuncs[_order.shift()];
+                // console.log(message, func, _order);
                 if( _order.length > 1 ){
                     func.apply(this||window,_order);
                 }else{

@@ -107,11 +107,7 @@
 		},
 		trigger: function(keyevent) {
 			// the events can handle that occurred at body element only.
-			if (!(keyevent.srcElement instanceof HTMLBodyElement)) return this;
-
-
-            console.log(keyevent);
-
+			// if (!(keyevent.srcElement instanceof HTMLBodyElement)) return this;
 			var r = KeyEventListener.responder()
 				,	events = KeyEventListener._hotkeys[keyevent.which];
 
@@ -165,8 +161,24 @@
 
 	$(document).ready(function() {
 		// register key event.
-		document.body.addEventListener('keyup', Backbone.KeyEventListener.trigger);
-		document.body.addEventListener('keydown', Backbone.KeyEventListener.trigger);
+		
+		// document.body.addEventListener('keyup', Backbone.KeyEventListener.trigger);
+		// document.body.addEventListener('keydown', Backbone.KeyEventListener.trigger);
+
+		var listener = function(event, context, cbox) {
+			var ke = document.createEvent("KeyboardEvent");
+
+			// Chromium Hack
+    	Object.defineProperty(ke, 'keyCode', {get : function() {return this.keyCodeVal;}});
+    	
+    	Object.defineProperty(ke, 'which', {get : function() {return this.keyCodeVal;}});
+
+			ke.initKeyboardEvent(event.type == 'Down' ? 'keydown' : 'keyup', 
+				true, true, null, false, false, false, false, event.keyCode, event.keyCode);
+			ke.keyCodeVal = event.keyCode;
+			Backbone.KeyEventListener.trigger(ke);
+		}
+		cbox.addEventListener(listener);
 	});
 	
 
