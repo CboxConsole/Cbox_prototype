@@ -280,19 +280,19 @@ jQuery(function ($) {
         $("#osx-container").css("visibility","visible");
     };
 
-    var CBOX_SDK_KEYMAP = {
-        37 : 'left',
-        38 : 'up',
-        39 : 'right',
-        40 : 'down',
-        13 : 'btnA', //enter
-        8 : 'back',
-        27 : 'esc',
-        65: 'btnA', // a
-        83 : 'btnB', //s
-        90 : 'btnY', //z
-        88 : 'btnX' //x
-    };
+        var CBOX_SDK_KEYMAP = {
+            37 : 'left',
+            38 : 'up',
+            39 : 'right',
+            40 : 'down',
+            13 : 'btnA', //enter
+            8 : 'back',
+            27 : 'esc',
+            65: 'btnA', // a
+            83 : 'btnB', //s
+            90 : 'btnY', //z
+            88 : 'btnX' //x
+        };
 
     var CBOX_SDK_keyboard = function(keycode,kind){
         //TODO : Connect Here for Keyboard Events

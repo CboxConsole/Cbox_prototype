@@ -109,6 +109,9 @@
 			// the events can handle that occurred at body element only.
 			if (!(keyevent.srcElement instanceof HTMLBodyElement)) return this;
 
+
+            console.log(keyevent);
+
 			var r = KeyEventListener.responder()
 				,	events = KeyEventListener._hotkeys[keyevent.which];
 
@@ -125,7 +128,7 @@
 		on: function(events, callback, context) {
 			var keyEvents = this.keyEvents || (this.keyEvents = {})
 				,	hotKeyEvents = KeyEventListener._hotkeys || (KeyEventListener._hotkeys = {})
-				,	event; 			
+				,	event;
 
 			events = events.split(/\s+/);
 			while (event = events.shift()) {
