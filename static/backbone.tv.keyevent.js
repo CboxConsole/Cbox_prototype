@@ -165,20 +165,46 @@
 		// document.body.addEventListener('keyup', Backbone.KeyEventListener.trigger);
 		// document.body.addEventListener('keydown', Backbone.KeyEventListener.trigger);
 
-		var listener = function(event, context, cbox) {
-			var ke = document.createEvent("KeyboardEvent");
-
-			// Chromium Hack
-    	Object.defineProperty(ke, 'keyCode', {get : function() {return this.keyCodeVal;}});
-    	
-    	Object.defineProperty(ke, 'which', {get : function() {return this.keyCodeVal;}});
-
-			ke.initKeyboardEvent(event.type == 'Down' ? 'keydown' : 'keyup', 
-				true, true, null, false, false, false, false, event.keyCode, event.keyCode);
-			ke.keyCodeVal = event.keyCode;
-			Backbone.KeyEventListener.trigger(ke);
+		cbox.previousEvent = {
+			pX1: 0,
+			pY1: 0
 		}
-		cbox.addEventListener(listener);
+
+		cbox.addEventListener(function(event, context, cbox) {
+			if (event.type != 'Down') return;
+
+			var keycode = undefined;
+			if (cbox.previousEvent.pX1 < event.pX1)
+				keycode = 39;
+			else if (cbox.previousEvent.pX1 > event.pX1)
+				keycode = 37;
+			if (cbox.previousEvent.pY1 < event.pY1)
+				keycode = 40;
+			else if (cbox.previousEvent.pY1 > event.pY1)
+				keycode = 38;
+			else if (event.btnA)
+				keycode = 13;
+			else if (event.btnB)
+				keycode = 27;
+
+			// hard copy events
+			cbox.previousEvent.pX1 = event.pX1;
+			cbox.previousEvent.pY1 = event.pY1;
+			cbox.previousEvent.type = event.type;
+
+			if (keycode) {
+				var ke = document.createEvent("KeyboardEvent");
+				// Chromium Hack, http://goo.gl/QNwqH
+	    	Object.defineProperty(ke, 'keyCode', {get : function() {return this.keyCodeVal;}});
+	    	Object.defineProperty(ke, 'which', {get : function() {return this.keyCodeVal;}});
+
+				ke.initKeyboardEvent(event.type == 'Down' ? 'keydown' : 'keyup', 
+					true, true, null, false, false, false, false, keycode, keycode);
+				ke.keyCodeVal = keycode;
+
+				Backbone.KeyEventListener.trigger(ke);
+			}
+		});
 	});
 	
 
