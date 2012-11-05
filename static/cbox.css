@@ -1,3 +1,5 @@
+/* GLOBAL */
+
 html {
 	background-image: url(../images/chrome-grey-128.png), url(../images/cbox-bg-01.png);
 	background-position: left top, center center;
@@ -10,97 +12,105 @@ body {
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
+	margin:0;
+	padding: 0;
 }
+
+/* HOME SCREEN AND SLIDERS */
 
 .homescreen {
 	position: absolute;
 	left: 50%;
   top: 50%;
-  width:1036px;
-	height:374px;
-  margin-left:-530px;
-  margin-top:-187px;
-
-  /*border: 1px solid black;*/
+  width:1024px;
+	height:648px;
+  margin-left:-512px;
+  margin-top:-324px;
 }
 
-.homescreen .side .box.focus {
-	-webkit-transform: scale(1.05);
-	border: 2px solid white;
-}
-
-.homescreen .box {
-	height:187px;
-	background-color: black;
-	background-repeat:no-repeat;
-	background-clip:content-box;
-	background-position:center; 
-	background-size: contain;
-}
-
-.homescreen .box .titlebar {
-	width:262px;
-	height:30px;
-	background-color: white;
-	color: #bc8f8f;
-	font-size: 18pt;
-}
-
-.homescreen .box#center .titlebar {
+#android {
 	position: absolute;
-	top: 348px;
-	width:500px;
+	background-image: url(../images/android-256.png);
+	background-position: center, center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width:200px;
+	height:200px;
+	z-index: 20000;
+	margin-top: 46%;
+	left:-37px;
 }
 
-.homescreen .box#center {
-	float: left;
-	height:378px;
-	width: 500px;
-	margin-right: 4px;
-	border:2px solid rgba(0,0,0,0);
-	background-position: 0 0px;
-	background-size: 2500px 378px;
-}
-
-.homescreen .box#center.focus {
-	border:2px solid rgba(0,0,0,0.6);
-	
-	/* @HOLD
-	-webkit-animation:slide 8s; 
-	-webkit-animation-iteration-count: infinite;
-	-webkit-animation-timing-function:erase-out;
-	-webkit-animation-delay: 1s;
-	*/
-}
-
-@-webkit-keyframes slide
-{
-	0% {background-position: 0 0px;}
-	25% {background-position: -500px 0px;}
-	50% {background-position: -1000px 0px;}
-	75% {background-position: -1500px 0px;}
-	100% {background-position: -2000px 0px;}
-}
-
-.homescreen .side {
-	width:262px;
-	float: left;
-}
-.homescreen .side:first-child {
-	margin-right: 4px;
-}
-
-.homescreen .side .box {
-	margin-bottom: 4px;
-}
-
-.shadow {
-	position: absolute;
-	bottom: -80px;
+#sliderview {
 	width:100%;
-	height:20px;
-	background: -webkit-radial-gradient(center, ellipse cover, rgba(10,10,10,0.5) 1%, rgba(255,255,255,0) 100%);
+	height:100%;
+	border:1px solid red;
+	padding-left: 0px;
 }
+
+#sliderview .slider:nth-child(1) {
+	-webkit-transform: scale(1);
+	z-index: 9999;
+	margin-top:-123px;
+}
+
+#sliderview .slider:nth-child(2) {
+	-webkit-transform: scale(0.84);
+	z-index: 9998;
+	/* var w = 396, nth=2;(w * (nth - 1)) - ((w * 0.1608) * valocity) */
+	left:300px;
+}
+
+#sliderview .slider:nth-child(3) {
+	-webkit-transform: scale(0.68);
+	z-index: 9997;
+	/* valocity is 5 */
+	left:505px;
+}
+
+#sliderview .slider:nth-child(4) {
+	-webkit-transform: scale(0.52);
+	z-index: 9996;
+	/* valocity is 9 */
+	left:617px;
+}
+	
+#sliderview .slider:nth-child(5) {
+	-webkit-transform: scale(0.36);
+	z-index: 9995;
+	/* valocity is 14 */
+	left:	692px;
+}
+
+.slider {
+	position: relative;
+	width:396px;
+	height:246px;
+  top: 50%;
+  margin-top: -25%;
+  margin-left: 62px;
+  background-position: center, center;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	-webkit-transition: left 300ms ease-out;
+}
+
+.slider .banner {
+	display: inline-block;
+	width: 100%;
+	height:100%;
+}
+
+
+.slider .reflect {
+	position: relative;
+	top:-4px;
+	width:396px;
+	height: 48px;
+}
+
+
+/* GAME LAUNCHER AND SANDBOX */
 
 .game-launcher {
 	z-index: 99999;
@@ -120,12 +130,9 @@ body {
 	top: 0;	
 }
 
+/* OSX MODAL, OVERRAY AND CONTAINER */
 #osx-modal-content {display:none;}
-
-/* Overlay */
 #osx-overlay {background-color:#000; cursor:wait;}
-
-/* Container */
 #osx-container {position: absolute; background-color:#eee; color:#000; margin: 0 auto; font: 16px/24px "Lucida Grande",Arial,sans-serif; padding-bottom:4px; width:600px; -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; -moz-box-shadow:0 0 64px #000; -webkit-box-shadow:0 0 64px #000; box-shadow:0 0 64px #000;}
 #osx-container a {color:#ddd;}
 #osx-container #osx-modal-title {color:#000; background-color:#ddd; border-bottom:1px solid #ccc; font-weight:bold; padding:6px 8px; text-shadow:0 1px 0 #f4f4f4;}
