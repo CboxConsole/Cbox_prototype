@@ -1,53 +1,56 @@
 
 // Cbox homescreen
 // @ragingwind
+// version: 0.0.1
 
 var Slider = Backbone.View.extend({
 	className:'slider',
 	initialize: function() {
 		_.bindAll(this, 'reflect');
 	},
-	reflect: function(can, arg) {
-		var i = arg.img.clone()[0];
-		if (can.getContext) {
-        var ctx = can.getContext("2d");
-        ctx.save();
-        ctx.translate(0, arg.height - 1);
-        ctx.scale(1, -1);
-        ctx.drawImage(i, 0, 0, arg.width, arg.height);
-        ctx.restore();
-        ctx.globalCompositeOperation = "destination-out";
-        ctx.fillStyle = arg.color;
-        ctx.fillRect(0, arg.height * 0.5, arg.width, arg.height);
-        var gra = ctx.createLinearGradient(0, 0, 0, arg.height * arg.ref);
-        gra.addColorStop(1, "rgba(255, 255, 255, 1.0)");
-        gra.addColorStop(0, "rgba(255, 255, 255, " + (1 - arg.ref) + ")");
-        ctx.fillStyle = gra;
-        ctx.rect(0, 0, arg.width, arg.height);
-        ctx.fill();
-        delete ctx, gra;
-      }
+	reflect: function() {
+		/*
+			reflect code from greate article.
+			"Cross-Browser CSS Reflections, Glows and Blurs" - http://goo.gl/iH72G
+		*/
+		var opt = {
+			canvas: this.$canvas[0],
+			img: this.$img[0],
+			reflection: 0.5,
+			bgcolor: '#000000',
+			height:246,
+			width:396
+		};
+
+		if (opt.canvas.getContext) {
+      var ctx = opt.canvas.getContext("2d")
+      	,	gradient = ctx.createLinearGradient(0, 0, 0, opt.height * opt.reflection);
+
+      gradient.addColorStop(1, "rgba(255, 255, 255, 1.0)");
+      gradient.addColorStop(0, "rgba(255, 255, 255, " + (1 - opt.reflection) + ")");
+
+      ctx.save();
+      ctx.translate(0, opt.height - 1);
+      ctx.scale(1, -1);
+      ctx.drawImage(opt.img, 0, 0, opt.width, opt.height);
+      ctx.restore();
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.fillStyle = opt.color;
+      ctx.fillRect(0, opt.height * 0.5, opt.width, opt.height);
+      ctx.fillStyle = gradient;
+      ctx.rect(0, 0, opt.width, opt.height);
+      ctx.fill();
+      delete ctx, gradient;
+    }
 	},
 	render: function() {
-		var $reflect = $('<canvas class="reflect"></canvas>');
-		var $img = $('<img class="banner" src="' + this.options.game.banner + '"></img>');
+		this.$canvas = $('<canvas class="reflect"></canvas>');
+		this.$img = $('<img class="banner" src="' + this.options.game.banner + '"></img>');
 		
-		this.$el.append($img);
-		this.$el.append($reflect[0]);
-
-		this.options.reflection = 0.5;
-		this.options.bgColor =  '#00F';
+		this.$img.load(this.reflect);
+		this.$el.append(this.$img);
+		this.$el.append(this.$canvas);
 		
-		var self = this;
-		$img.load(function() {
-      self.reflect($reflect[0], {
-      'img': $img,
-      'ref': self.options.reflection,
-      'height': 246, // this.$el.height(),
-      'width': 396, //this.$el.width(),
-      'color': self.options.bgColor});
-    });
-
 		return this;
 	}
 });
