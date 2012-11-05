@@ -162,8 +162,11 @@
 	$(document).ready(function() {
 		// register key event.
 		
-		// document.body.addEventListener('keyup', Backbone.KeyEventListener.trigger);
-		// document.body.addEventListener('keydown', Backbone.KeyEventListener.trigger);
+		var debug = false;
+		if (debug) {
+			document.body.addEventListener('keyup', Backbone.KeyEventListener.trigger);
+			document.body.addEventListener('keydown', Backbone.KeyEventListener.trigger);
+		}
 
 		cbox.previousEvent = {
 			pX1: 0,
