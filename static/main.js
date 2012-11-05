@@ -1,12 +1,11 @@
 $(document).ready(function() {
 	// game list preset.
 	var games = [
-		{title:'킹콩! 동킹콩!', banner:'dkingkong.jpg', url:'static/game-sample.html'},
-		{title:'벽돌깨기', banner:'breakout.jpg', url:'static/game-sample.html'},
-		{title:'', banner:'padv.jpg', url:'static/game-sample.html'},
-		{title:'늑대인간', banner:'ramface.jpg', url:'static/game-sample.html'},
-		{title:'갤러그', banner:'garaga.gif', url:'static/game-sample.html'},
-		{title:'슈퍼마리오', banner:'smario.jpg', url:'static/game-sample.html'}
+		{title:'CBox소개', banner:'games/breakout.png', url:'static/game-sample.html'},
+		{title:'CBox소개2', banner:'games/penguin-adv.png', url:'static/game-sample.html'},
+		{title:'각설탕쌓기', banner:'games/sugarpang.png', url:'static/game-sample.html'},
+		{title:'벽돌깨기', banner:'games/breakout.png', url:'static/game-sample.html'},
+		{title:'몽대륙', banner:'games/penguin-adv.png', url:'static/game-sample.html'}
 	];
 
 	// create a homescreen.
