@@ -12,7 +12,7 @@ $(document).ready(function() {
 	var hs = window.homescreen = new Homescreen({games:games});
 
 	// bind box selecting event to launch games.
-	hs.on('game:select', function(box, game) {
+	hs.on('game:select', function(game) {
 		// create and show game screen with the game parameter.
 		var gl = new GameLauncher({game:game});
 		$('body').append(gl.render().$el);		
