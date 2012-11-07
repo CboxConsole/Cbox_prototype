@@ -243,7 +243,6 @@ jQuery(function ($) {
 			window.cbox.listener = listener;
 		},
 		triggerEvent: function(ce) {
-            console.debug("=========",ce);
 			!window.cbox.listener || window.cbox.listener(ce, cbox.context, window.cbox)
 		}
 	}
@@ -360,7 +359,6 @@ jQuery(function ($) {
         CBOX_INPUT.type = kind;
 
         // trigger event to listener
-        console.log(cbox.context, cbox);
         cbox.triggerEvent(CBOX_INPUT, cbox.context, cbox);
     };
     var i = 0;
