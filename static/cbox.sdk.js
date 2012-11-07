@@ -48,7 +48,7 @@ var common = (function () {
         // instead of attaching the event listeners directly to the <EMBED> element
         // to ensure that the listeners are active before the NaCl module 'load'
         // event fires.
-        var listenerDiv = document.getElementById('listener');
+        var listenerDiv = document.getElementById('android');
         listenerDiv.appendChild(moduleEl);
     }
 
@@ -61,7 +61,7 @@ var common = (function () {
      * C++).
      */
     function attachDefaultListeners() {
-        var listenerDiv = document.getElementById('listener');
+        var listenerDiv = document.getElementById('android');
         listenerDiv.addEventListener('load', moduleDidLoad, true);
         listenerDiv.addEventListener('message', handleMessage, true);
 
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (loadFunction) {
         loadFunction("cbox_sdk", "static", "cbox_sdk",
-            70, 25);
+            200, 200);
 
     }
 });
@@ -238,11 +238,12 @@ document.addEventListener('DOMContentLoaded', function() {
 jQuery(function ($) {
 	window.cbox = {
 		listener: undefined,
-		context: undefined,
+        context: undefined,
 		addEventListener: function(listener, context) {
 			window.cbox.listener = listener;
 		},
 		triggerEvent: function(ce) {
+            console.debug("=========",ce);
 			!window.cbox.listener || window.cbox.listener(ce, cbox.context, window.cbox)
 		}
 	}
@@ -266,7 +267,6 @@ jQuery(function ($) {
     };
 
     var CBOX_SDK_focusIn = function(){
-        $("#osx-container").css("visibility","hidden");
         var CBOX_INPUT = {
             pX1 : 0,
             pY1 : 0,
@@ -286,7 +286,6 @@ jQuery(function ($) {
         };
     };
     var CBOX_SDK_focusOut = function(){
-        $("#osx-container").css("visibility","visible");
     };
 
         var CBOX_SDK_KEYMAP = {
@@ -361,12 +360,61 @@ jQuery(function ($) {
         CBOX_INPUT.type = kind;
 
         // trigger event to listener
+        console.log(cbox.context, cbox);
         cbox.triggerEvent(CBOX_INPUT, cbox.context, cbox);
     };
     var i = 0;
+    var _btn = {
+
+    }
     var CBOX_SDK_gamepad = function(){
-    	if (i++ % 50)
-        cbox.triggerEvent(CBOX_INPUT);
+        i = (++i % 100);
+        if( i == 0 ){
+            //console.debug(arguments,arguments.length);
+            CBOX_INPUT.btnA = parseInt(arguments[4]);
+            CBOX_INPUT.btnB = parseInt(arguments[5]);
+            CBOX_INPUT.btnX= parseInt(arguments[7]);
+            CBOX_INPUT.btnY = parseInt(arguments[6]);
+
+            if(arguments[16] == 1){
+                CBOX_INPUT.pY1 -= 2;
+            }
+            if(arguments[17] == 1 ){
+                CBOX_INPUT.pY1 += 2;
+            }
+            if(arguments[18] == 1){
+                CBOX_INPUT.pX1 -= 2;
+            }
+            if(arguments[19] == 1){
+                CBOX_INPUT.pX1 += 2;
+            }
+            CBOX_INPUT.type = "Down";
+
+            cbox.triggerEvent(CBOX_INPUT);
+
+
+            //joy1 - x arguments[0]
+            //joy1 - y arguments[1]
+            //joy2 - x arguments[2]
+            //joy2 - y arguments[3]
+            //btn A arguments[4]
+            //btn B arguments[5]
+            //btn X arguments[6]
+            //btn Y arguments[7]
+            //joy1 - x arguments[8]
+            //joy1 - x arguments[9]
+            //joy1 - x arguments[10]
+            //joy1 - x arguments[11]
+            //joy1 - x arguments[12]
+            //joy1 - x arguments[13]
+            //joy1 - x arguments[14]
+            //joy1 - x arguments[15]
+            //d but - up arguments[16]
+            //d but - down arguments[17]
+            //d but - left arguments[18]
+            //d but - right arguments[10]
+            //center X button arguments[20]
+        }
     };
 
     var CBOX_SDK_nunchuk =  function(){
@@ -390,11 +438,13 @@ jQuery(function ($) {
             if( message.data.indexOf("o::") == 0 ){
                 _order = message.data.replace("o::","").split(":");
                 func = _defaultFuncs[_order.shift()];
-                // console.log(message, func, _order);
-                if( _order.length > 1 ){
-                    func.apply(this||window,_order);
-                }else{
-                    func();
+                if(func){
+//                    console.log(message.data);
+                    if( _order.length > 1 ){
+                        func.apply(this||window,_order);
+                    }else{
+                        func();
+                    }
                 }
             }
         }
@@ -402,10 +452,6 @@ jQuery(function ($) {
 
 
     $("#osx-modal-content").fadeIn('slow');
-    setTimeout(function(){
-        $("#nacl_module").css("position","absolute");
-        $("#nacl_module").css("margin","-5px 0 0 -60px");
-    },100);
 
 
 });
