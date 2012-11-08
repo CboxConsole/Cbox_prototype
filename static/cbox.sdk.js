@@ -386,6 +386,7 @@ jQuery(function ($) {
             if(arguments[19] == 1){
                 CBOX_INPUT.pX1 += 2;
             }
+            // for keyboard hack. :)
             CBOX_INPUT.type = "Down";
 
             cbox.triggerEvent(CBOX_INPUT);

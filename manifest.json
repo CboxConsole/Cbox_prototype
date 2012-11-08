@@ -17,8 +17,16 @@
           "128": "chrome-grey-128.png"
       }
   },
+    "permissions": [
+        "tabs", "http://*/*","https://*/*"
+    ],
   "update_url" : "http://localhost:8888/",
   "background": { 
-  	"scripts": ["static/background.js"] 
-	}
+  	"scripts": ["static/background.js"]
+	},
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "js": ["static/jquery.js","static/cbox.controller.js"],
+        "all_frames":true
+    }]
 }
