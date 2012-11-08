@@ -6,10 +6,12 @@
  * To change this template use File | Settings | File Templates.
  */
 
-console.log(document, window);
 
+var gameScript = $("#cboxscript").html();
+eval(gameScript);
 
-var testScript = $("#cboxscript").html();
-eval(testScript);
-testCall("test");
-
+$(function(){
+    pubsub.sub("controlls",function(msg){
+        cboxgame.fireEvent(msg.data);
+    });
+});

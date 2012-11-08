@@ -243,7 +243,8 @@ jQuery(function ($) {
 			window.cbox.listener = listener;
 		},
 		triggerEvent: function(ce) {
-			!window.cbox.listener || window.cbox.listener(ce, cbox.context, window.cbox)
+			!window.cbox.listener || window.cbox.listener(ce, cbox.context, window.cbox);
+            pubsub.pub("controlls",{"data":ce});
 		}
 	}
 
@@ -371,8 +372,8 @@ jQuery(function ($) {
             //console.debug(arguments,arguments.length);
             CBOX_INPUT.btnA = parseInt(arguments[4]);
             CBOX_INPUT.btnB = parseInt(arguments[5]);
-            CBOX_INPUT.btnX= parseInt(arguments[7]);
-            CBOX_INPUT.btnY = parseInt(arguments[6]);
+            CBOX_INPUT.btnX= parseInt(arguments[6]);
+            CBOX_INPUT.btnY = parseInt(arguments[7]);
 
             if(arguments[16] == 1){
                 CBOX_INPUT.pY1 -= 2;

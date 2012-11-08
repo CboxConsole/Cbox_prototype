@@ -26,7 +26,10 @@
 	},
     "content_scripts": [{
         "matches": ["<all_urls>"],
-        "js": ["static/jquery.js","static/cbox.controller.js"],
+        "js": ["static/jquery.js",
+            "static/libs/collie.min.js",
+            "static/pubsub.js",
+            "static/cbox.controller.js"],
         "all_frames":true
     }]
 }
