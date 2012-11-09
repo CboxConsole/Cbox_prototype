@@ -68,7 +68,7 @@ var SliderView = Backbone.View.extend({
 		}, this);
 	},
 	navigate: function(v, e) {
-		(e.keyid === 'right') ? this.enqueue() : this.dequeue();
+		(e.keyid === 'left') ? this.enqueue() : this.dequeue();
 	},
 	enqueue: function() {
 		var v = this.options.views[this.top];
