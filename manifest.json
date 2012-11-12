@@ -24,12 +24,25 @@
   "background": { 
   	"scripts": ["static/background.js"]
 	},
-    "content_scripts": [{
-        "matches": ["<all_urls>"],
-        "js": ["static/jquery.js",
-            "static/libs/collie.min.js",
-            "static/pubsub.js",
-            "static/cbox.controller.js"],
-        "all_frames":true
-    }]
+  "content_scripts": [
+	  {
+	      "matches": ["<all_urls>"],
+	      "run_at": "document_start",
+	      "js": ["static/jquery.js",
+	          "static/libs/collie.min.js",
+	          "static/libs/cocos2d.js",
+	          "static/libs/ranking.js"
+	          ],
+	      "all_frames":true
+	  },
+	  {
+      "matches": ["<all_urls>"],
+      "run_at": "document_end",
+      "js": [
+      	"static/pubsub.js",
+	      "static/cbox.controller.js"
+			],
+      "all_frames":true
+  	}
+  ]
 }
