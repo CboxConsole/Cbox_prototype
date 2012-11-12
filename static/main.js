@@ -1,15 +1,6 @@
 $(document).ready(function() {
-	// game list preset.
-	var games = [
-		{title:'CBox소개', banner:'games/breakout.png', url:'http://localhost:8000/Breakout/index.html'},
-		{title:'CBox소개2', banner:'games/penguin-adv.png', url:'http://localhost:8000/Android_Adventure/index.html'},
-		{title:'각설탕쌓기', banner:'games/sugarpang.png', url:'http://localhost:8000/Chrome_Pagoda/index.html'},
-		{title:'벽돌깨기', banner:'games/breakout.png', url:'http://localhost:8000/Breakout/index.html'},
-		{title:'몽대륙', banner:'games/penguin-adv.png', url:'http://localhost:8000/Android_Adventure/index.html'}
-	];
-
 	// create a homescreen.
-	var hs = window.homescreen = new Homescreen({games:games});
+	var hs = window.homescreen = new Homescreen({games:GameConfig});
 
 	// bind box selecting event to launch games.
 	hs.on('game:select', function(game) {
