@@ -60,15 +60,18 @@ var SliderView = Backbone.View.extend({
 	id: 'sliderview',
 	top: 0,
 	animate: false,
+    keyevent: true,
 	initialize: function() {
 		this.on('keydown:left keydown:right', this.navigate, this);
 		this.on('keydown:enter', function() {
+            this.keyevent = false;
 			var v = this.options.views[this.top - 1];
 			this.superview.trigger('game:select', v.options.game);
 		}, this);
 	},
 	navigate: function(v, e) {
-		(e.keyid === 'left') ? this.enqueue() : this.dequeue();
+        if (this.keyevent)
+		  (e.keyid === 'left') ? this.enqueue() : this.dequeue();
 	},
 	enqueue: function() {
 		var v = this.options.views[this.top];
@@ -119,7 +122,17 @@ var SliderView = Backbone.View.extend({
 var Homescreen = Backbone.View.extend({
 	className:'homescreen',
 	initialize: function() {
-		var games = this.options.games
+		var games = this.options.games;
+        // bind box selecting event to launch games.
+        this.on('game:select', function(game) {
+            // create and show game screen with the game parameter.
+            var gl = new GameLauncher({game:game, homescreen:this});
+            $('body').append(gl.render().$el);
+        }, this);
+
+        this.on('game:exit', function() {
+            this.sliderview.keyevent = true;
+        }, this);
 	},
 	render: function() {
 		this.$el.append('<div id=android></div>');
@@ -132,5 +145,6 @@ var Homescreen = Backbone.View.extend({
 		this.add(this.sliderview);
 		this.sliderview.focusin();
 		return this;
-	}
+	},
+
 });

@@ -2,6 +2,7 @@ var GameLauncher = Backbone.View.extend({
 	className:'game-launcher',
 	initialize: function() {
 		this.on('hkeydown:esc', function() {
+            this.options.homescreen.trigger('game:exit');
 			this.remove();
 			this.trigger('launcher:exit');
 		}, this);
