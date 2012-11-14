@@ -23,34 +23,34 @@ var Slider = Backbone.View.extend({
 		};
 
 		if (opt.canvas.getContext) {
-      var ctx = opt.canvas.getContext("2d")
-      	,	gradient = ctx.createLinearGradient(0, 0, 0, opt.height * opt.reflection);
+            var ctx = opt.canvas.getContext("2d")
+            ,	gradient = ctx.createLinearGradient(0, 0, 0, opt.height * opt.reflection);
 
-      gradient.addColorStop(1, "rgba(255, 255, 255, 1.0)");
-      gradient.addColorStop(0, "rgba(255, 255, 255, " + (1 - opt.reflection) + ")");
+            gradient.addColorStop(1, "rgba(255, 255, 255, 1.0)");
+            gradient.addColorStop(0, "rgba(255, 255, 255, " + (1 - opt.reflection) + ")");
 
-      ctx.save();
-      ctx.translate(0, opt.height - 1);
-      ctx.scale(1, -1);
-      ctx.drawImage(opt.img, 0, 0, opt.width, opt.height);
-      ctx.restore();
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = opt.color;
-      ctx.fillRect(0, opt.height * 0.5, opt.width, opt.height);
-      ctx.fillStyle = gradient;
-      ctx.rect(0, 0, opt.width, opt.height);
-      ctx.fill();
-      delete ctx, gradient;
-    }
+            ctx.save();
+            ctx.translate(0, opt.height - 1);
+            ctx.scale(1, -1);
+            ctx.drawImage(opt.img, 0, 0, opt.width, opt.height);
+            ctx.restore();
+            ctx.globalCompositeOperation = "destination-out";
+            ctx.fillStyle = opt.color;
+            ctx.fillRect(0, opt.height * 0.5, opt.width, opt.height);
+            ctx.fillStyle = gradient;
+            ctx.rect(0, 0, opt.width, opt.height);
+            ctx.fill();
+            delete ctx, gradient;
+        }
 	},
 	render: function() {
 		this.$canvas = $('<canvas class="reflect"></canvas>');
 		this.$img = $('<img class="banner" src="' + this.options.game.banner + '"></img>');
-		
+
 		this.$img.load(this.reflect);
 		this.$el.append(this.$img);
 		this.$el.append(this.$canvas);
-		
+
 		return this;
 	}
 });
@@ -88,11 +88,11 @@ var SliderView = Backbone.View.extend({
 		if (this.top > 1) {
 			var self = this
 				,	$v = $(self.$el.children('.slider')[0]);
-			
+
 			this.top--;
 			self.animate = true;
-			
-			// @TODO performance issue with sdk
+
+			// @DEPRECATD performance issue with sdk
 			if (true) {
 				$v.remove()
 				self.animate = false;
@@ -111,7 +111,7 @@ var SliderView = Backbone.View.extend({
 		for (var i = 0; i < this.options.views.length; ++i) {
 			this.enqueue();
 		}
-		
+
 		return this;
 	}
 });
@@ -128,7 +128,7 @@ var Homescreen = Backbone.View.extend({
 			views.push(new Slider({game:game}).render())
 		});
 
-		this.sliderview = new SliderView({views:views}).render();		
+		this.sliderview = new SliderView({views:views}).render();
 		this.add(this.sliderview);
 		this.sliderview.focusin();
 		return this;
