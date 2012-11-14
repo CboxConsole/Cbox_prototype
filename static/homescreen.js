@@ -66,7 +66,6 @@ var SliderView = Backbone.View.extend({
 		this.on('keydown:left keydown:right', this.navigate, this);
 		this.on('keydown:enter', function() {
             if (this.keyevent) {
-                this.keyevent = false;
                 var v = this.options.views[this.top - 1];
                 this.superview.trigger('game:select', v.options.game);
             }
@@ -140,8 +139,14 @@ var Homescreen = Backbone.View.extend({
         // bind box selecting event to launch games.
         this.on('game:select', function(game) {
             // create and show game screen with the game parameter.
-            var gl = new GameLauncher({game:game, homescreen:this});
-            $('body').append(gl.render().$el);
+            if (game.url.indexOf('redirect://') < 0) {
+                this.sliderview.keyevent = false;
+                var gl = new GameLauncher({game:game, homescreen:this});
+                $('body').append(gl.render().$el);
+            }
+            else
+                window.open(game.url.split('redirect://')[1]);
+
         }, this);
 
         this.on('game:exit', function() {
