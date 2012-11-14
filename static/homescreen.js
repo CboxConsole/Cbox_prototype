@@ -65,9 +65,11 @@ var SliderView = Backbone.View.extend({
 	initialize: function() {
 		this.on('keydown:left keydown:right', this.navigate, this);
 		this.on('keydown:enter', function() {
-            this.keyevent = false;
-			var v = this.options.views[this.top - 1];
-			this.superview.trigger('game:select', v.options.game);
+            if (this.keyevent) {
+                this.keyevent = false;
+                var v = this.options.views[this.top - 1];
+                this.superview.trigger('game:select', v.options.game);
+            }
 		}, this);
 
         for (var i = 0; i < 5; ++i)
