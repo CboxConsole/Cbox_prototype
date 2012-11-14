@@ -1,11 +1,11 @@
 /* GLOBAL */
 
 html {
-	background-image: url(../images/chrome-grey-128.png), url(../images/cbox-bg-01.png);
-	background-position: left top, center center;
+	background-image: url(../images/cbox-bg-01.png);
+	background-position: center center;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
-	background-size: 32px 32px, cover;
+	background-size: cover;
 }
 
 body {
@@ -73,7 +73,7 @@ body {
 	/* valocity is 9 */
 	left:617px;
 }
-	
+
 #sliderview .slider:nth-child(5) {
 	-webkit-transform: scale(0.36);
 	z-index: 9995;
@@ -126,7 +126,7 @@ body {
 	height: 100%;
 	position: absolute;
 	left: 0;
-	top: 0;	
+	top: 0;
 }
 
 /* OSX MODAL, OVERRAY AND CONTAINER */
