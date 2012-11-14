@@ -61,6 +61,7 @@ var SliderView = Backbone.View.extend({
 	top: 0,
 	animate: false,
     keyevent: true,
+    sounds: [],
 	initialize: function() {
 		this.on('keydown:left keydown:right', this.navigate, this);
 		this.on('keydown:enter', function() {
@@ -68,10 +69,21 @@ var SliderView = Backbone.View.extend({
 			var v = this.options.views[this.top - 1];
 			this.superview.trigger('game:select', v.options.game);
 		}, this);
+
+        for (var i = 0; i < 5; ++i)
+            this.sounds.push(new Audio('../sounds/slide.mp3'));
+        this.sounds.index = 0;
 	},
+    playSound: function() {
+        if (this.sounds.index >= this.sounds.length)
+                this.sounds.index = 0
+        this.sounds[this.sounds.index++].play();
+    },
 	navigate: function(v, e) {
-        if (this.keyevent)
-		  (e.keyid === 'left') ? this.enqueue() : this.dequeue();
+        if (this.keyevent) {
+            this.playSound();
+            (e.keyid === 'left') ? this.enqueue() : this.dequeue();
+        }
 	},
 	enqueue: function() {
 		var v = this.options.views[this.top];
