@@ -65,6 +65,11 @@ var common = (function () {
         listenerDiv.addEventListener('load', moduleDidLoad, true);
         listenerDiv.addEventListener('message', handleMessage, true);
 
+        var listenerDiv2 = document.getElementById('listenerWebSocket');
+        listenerDiv2.addEventListener('load', moduleDidLoad, true);
+        listenerDiv2.addEventListener('message', handleMessage2, true);
+
+
         if (typeof window.attachListeners !== 'undefined') {
             window.attachListeners();
         }
@@ -234,25 +239,113 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+//기본 값
+var _nunchuck = {
+    joyX : 126,
+    joyY : 130,
+    accX : 76,
+    accY : 132,
+    accZ : 130,
+    btnC : 1,
+    btnZ : 1
+};
 
+var updater = {
+    socket: null,
+    init : function() {
+        updater.socket = document.getElementById('websocket');
+        updater.start();
+        setTimeout(function(){
+            updater.socket.postMessage('s;Start');
+        },1000);
+    },
+    start: function() {
+        var url = "ws://localhost:8889/gamesocket";
+
+        updater.socket.postMessage('o;' + url);
+        console.log(url);
+
+
+    },
+    handleMessage: function(message_event) {
+        try{
+
+//			console.log(message_event.data);
+            var oData = $.parseJSON(message_event.data.replace("receive: ", ""));
+            //console.log(oData.aData);
+            nunchuck.joyX = oData.aData[0];
+            nunchuck.joyY = oData.aData[1];
+            nunchuck.accX = oData.aData[2];
+            nunchuck.accY = oData.aData[3];
+            nunchuck.accZ = oData.aData[4];
+            nunchuck.btnZ = oData.aData[5];
+            nunchuck.btnC = oData.aData[6];
+
+            if( _mode == 1 ){
+                $jGameScreenIFrame[0].contentWindow._listen( nunchuck, _nunchuck);
+            }
+
+            if( nunchuck.btnC == 1 ){
+                if( _nunchuck.btnC == 0 ){
+                    // 클릭 된거임
+                    _nunchuck.btnC = 1;
+                    if( _mode == 0 ){
+                        // 플랫폼인 경우엔 다음 게임 선택
+                        nextGame();
+                    }
+                }
+            }else{
+                // 눌림 상태 설정
+                _nunchuck.btnC = 0;
+            }
+
+            if( nunchuck.btnZ == 1 ){
+                if( _nunchuck.btnZ == 0 ){
+                    // 클릭 된거임
+                    _nunchuck.btnZ = 1;
+                    if( _mode == 0 ){
+                        // 플랫폼인 경우엔 다음 게임 선택
+                        selectGame();
+                    }
+                }
+            }else{
+                // 눌림 상태 설정
+                _nunchuck.btnZ = 0;
+            }
+
+
+        }catch(e){
+            console.log(e);
+        }
+
+    }
+};
+
+var _mode = "home";
 jQuery(function ($) {
-	window.cbox = {
-		listener: undefined,
+    window.cbox = {
+        listener: undefined,
         context: undefined,
-		addEventListener: function(listener, context) {
-			window.cbox.listener = listener;
-		},
-		triggerEvent: function(ce) {
-			!window.cbox.listener || window.cbox.listener(ce, cbox.context, window.cbox);
+        addEventListener: function(listener, context) {
+            window.cbox.listener = listener;
+        },
+        triggerEvent: function(ce) {
+            !window.cbox.listener || window.cbox.listener(ce, cbox.context, window.cbox);
             pubsub.pub("controlls",{"data":ce});
-		}
-	}
+        }
+    };
+
+    setTimeout(function(){
+        updater.init();
+    },1000);
 
     var CBOX_INPUT = {
         pX1 : 0,
         pY1 : 0,
         pX2 : 0,
         pY2 : 0,
+        pX3 : 0,
+        pY3 : 0,
         btnA : 0,
         btnB : 0,
         btnY : 0,
@@ -261,6 +354,8 @@ jQuery(function ($) {
         btnRB : 0,
         btnLT : 0,
         btnRT : 0,
+        btnBack : 0,
+        btnStart : 0,
         accX : 0,
         accY : 0,
         accZ : 0
@@ -272,6 +367,8 @@ jQuery(function ($) {
             pY1 : 0,
             pX2 : 0,
             pY2 : 0,
+            pX3 : 0,
+            pY3 : 0,
             btnA : 0,
             btnB : 0,
             btnY : 0,
@@ -280,6 +377,8 @@ jQuery(function ($) {
             btnRB : 0,
             btnLT : 0,
             btnRT : 0,
+            btnBack : 0,
+            btnStart : 0,
             accX : 0,
             accY : 0,
             accZ : 0
@@ -288,19 +387,19 @@ jQuery(function ($) {
     var CBOX_SDK_focusOut = function(){
     };
 
-        var CBOX_SDK_KEYMAP = {
-            37 : 'left',
-            38 : 'up',
-            39 : 'right',
-            40 : 'down',
-            13 : 'btnA', //enter
-            8 : 'back',
-            27 : 'esc',
-            65: 'btnA', // a
-            83 : 'btnB', //s
-            90 : 'btnY', //z
-            88 : 'btnX' //x
-        };
+    var CBOX_SDK_KEYMAP = {
+        37 : 'left',
+        38 : 'up',
+        39 : 'right',
+        40 : 'down',
+        13 : 'btnA', //enter
+        8 : 'back',
+        27 : 'esc',
+        65: 'btnA', // a
+        83 : 'btnB', //s
+        90 : 'btnY', //z
+        88 : 'btnX' //x
+    };
 
     var CBOX_SDK_keyboard = function(keycode,kind){
         //TODO : Connect Here for Keyboard Events
@@ -367,13 +466,27 @@ jQuery(function ($) {
 
     }
     var CBOX_SDK_gamepad = function(){
-        i = (++i % 100);
+        //console.log(_mode);
+        if( _mode === "home"){
+            i = (++i % 10);
+        }else{
+            i = 0;
+        }
         if( i == 0 ){
             //console.debug(arguments,arguments.length);
             CBOX_INPUT.btnA = parseInt(arguments[4]);
             CBOX_INPUT.btnB = parseInt(arguments[5]);
             CBOX_INPUT.btnX= parseInt(arguments[6]);
             CBOX_INPUT.btnY = parseInt(arguments[7]);
+
+            CBOX_INPUT.btnLB = parseInt(arguments[8]);
+            CBOX_INPUT.btnRB = parseInt(arguments[9]);
+            CBOX_INPUT.btnLT= (arguments[10]>0)?1:0;
+            CBOX_INPUT.btnRT = (arguments[11]>0)?1:0;
+
+            CBOX_INPUT.btnBack = parseInt(arguments[12]);
+            CBOX_INPUT.btnStart = parseInt(arguments[13]);
+
 
             if(arguments[16] == 1){
                 CBOX_INPUT.pY1 -= 2;
@@ -390,13 +503,44 @@ jQuery(function ($) {
             // for keyboard hack. :)
             CBOX_INPUT.type = "Down";
 
+            if(arguments[0] <= 70){
+                // left
+                CBOX_INPUT.pX3 -= 2;
+            }else if(arguments[0] >= 80){
+                //right
+                CBOX_INPUT.pX3 += 2;
+            }
+            if(arguments[1] <= 90 ){
+                // left
+                CBOX_INPUT.pY3 -= 2;
+            }else if(arguments[1] >= 110){
+                //right
+                CBOX_INPUT.pY3 += 2;
+            }
+
+            if(arguments[2] <= 70){
+                // left
+                CBOX_INPUT.pX2 -= 2;
+            }else if(arguments[2] >= 80){
+                //right
+                CBOX_INPUT.pX2 += 2;
+            }
+            if(arguments[3] <= 90 ){
+                // left
+                CBOX_INPUT.pY2 -= 2;
+            }else if(arguments[3] >= 110){
+                //right
+                CBOX_INPUT.pY2 += 2;
+            }
+
+
             cbox.triggerEvent(CBOX_INPUT);
 
 
-            //joy1 - x arguments[0]
-            //joy1 - y arguments[1]
-            //joy2 - x arguments[2]
-            //joy2 - y arguments[3]
+            //joy1 - x arguments[0] // 73 50~100
+            //joy1 - y arguments[1] // 98 0 ~200
+            //joy2 - x arguments[2] // 72 50~100
+            //joy2 - y arguments[3] // 105 0~200
             //btn A arguments[4]
             //btn B arguments[5]
             //btn X arguments[6]
@@ -449,6 +593,19 @@ jQuery(function ($) {
             }
         }
     }
+
+    window.handleMessage2 = function(message) {
+        var _order = [];
+        var func = function(){};
+
+        console.log(message);
+
+        return;
+
+
+    }
+
+
 
 
     $("#osx-modal-content").fadeIn('slow');
